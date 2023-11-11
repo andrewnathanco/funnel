@@ -7,12 +7,6 @@ import (
 )
 
 func ValidateENV() error {
-	blacklist_db := os.Getenv(EnvFunnelDB)
-	slog.Info("USING: " + blacklist_db)
-	if blacklist_db == "" {
-		return fmt.Errorf("need environment variable %s", EnvFunnelDB)
-	}
-
 	mural_db := os.Getenv(EnvMuralDB)
 	slog.Info("USING: " + mural_db)
 	if mural_db == "" {

@@ -19,6 +19,7 @@ func NewBoardTemplateController(
 
 	// add buttons
 	board_template_files = append(board_template_files, BoardTemplates...)
+	board_template_files = append(board_template_files, IndexTemplate...)
 
 	board_template := template.Must(
 		template.New("board_template").Funcs(func_map).ParseFiles(

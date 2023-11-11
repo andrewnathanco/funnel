@@ -1,97 +1,45 @@
 {{ define "board" }}
   <main
-    class="m-8 flex flex-col justify-between items-center space-y-4 w-full h-full"
+    id="board"
+    class="flex flex-col justify-between items-center space-y-4 w-full h-full"
   >
-    <div class="flex flex-col space-y-4">
+    <div class="flex flex-col space-y-4 w-full">
       <div class="text-4xl">
-        Mission: Impossible - Dead Reckoning Part One (2023)
-      </div>
-      <div class="text-md">
-        Ethan Hunt and his IMF team embark on their most dangerous mission yet:
-        To track down a terrifying new weapon that threatens all of humanity
-        before it falls into the wrong hands. With control of the future and the
-        world's fate at stake and dark forces from Ethan's past closing in, a
-        deadly race around the globe begins. Confronted by a mysterious,
-        all-powerful enemy, Ethan must consider that nothing can matter more
-        than his mission—not even the lives of those he cares about most.
+        <div
+          class="
+          flex flex-col border-2 border-river-bed-800 bg-cover w-full h-96 rounded-lg
+        "
+          style="background-image: url('https://image.tmdb.org/t/p/w1280{{ .Movie.PosterPath }}');"
+        ></div>
       </div>
     </div>
-    <div class="p-8 flex flex-col space-y-6 w-full">
-      <div class="flex space-x-2 justify-between">
-        <div
-          class="
-            p-6 rounded-full bg-el-salva-400 border-4 border-river-bed-800 text-river-bed-800
-            shadow-lg 
-        "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="3"
-            stroke="currentColor"
-            class="w-8 h-8"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </div>
-        <div
-          class="
-          p-6 rounded-full bg-golden-grass-300 border-4 border-river-bed-800 text-river-bed-800
-          shadow-lg
-      "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="3.0"
-            stroke="currentColor"
-            class="w-8 h-8"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-            />
-          </svg>
-        </div>
-        <div
-          class="
-        p-6 rounded-full bg-dingley-400 border-4 border-river-bed-800 text-river-bed-800
-        shadow-lg
-    "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="3.0"
-            stroke="currentColor"
-            class="w-8 h-8"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </div>
+    <div class="flex flex-col space-y-4">
+      <div class="text-4xl">
+        {{ .Movie.Title }} ({{ getReleaseYear .Movie }})
       </div>
+      <div class="text-md">{{ .Movie.Overview }}</div>
+    </div>
+    <div class="p-8 flex flex-col space-y-12 w-full">
       <div
-        hx-put="/funnel"
+        class="flex flex-col 
+          space-y-2
+      "
+      >
+        {{ template "green-option" newOption (eq .SelectedList "GREEN_LIST") }}
+        {{ template "yellow-option" newOption (eq .SelectedList "YELLOW_LIST") }}
+        {{ template "red-option" newOption (eq .SelectedList "BLACK_LIST") }}
+      </div>
+
+      <div
+        hx-put="/funnel/submit"
         hx-swap="innerHTML"
-        hx-target="#game-board"
+        hx-target="#body"
         class="
-          w-full p-2 text-base text-river-bed-100 rounded-md 
-          flex justify-center items-center
-          hover:cursor-pointer bg-river-bed-600
-          shadow-lg
-  "
+            w-full p-2 text-base text-river-bed-100 rounded-md 
+            flex justify-center items-center
+            hover:cursor-pointer bg-river-bed-600
+            shadow-lg
+        "
       >
         Submit
       </div>

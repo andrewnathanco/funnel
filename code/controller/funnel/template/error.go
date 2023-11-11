@@ -17,7 +17,7 @@ func NewErrorTemplateController(
 	error_template_files := []string{}
 
 	// add buttons
-	error_template_files = append(error_template_files, BoardTemplates...)
+	error_template_files = append(error_template_files, ErrorTemplates...)
 
 	error_template := template.Must(
 		template.New("error_template").Funcs(func_map).ParseFiles(

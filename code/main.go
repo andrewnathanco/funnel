@@ -52,15 +52,6 @@ func main() {
 		panic(1)
 	}
 
-	// setup database
-	blacklistDAL, err := sql.NewSQLiteDal(os.Getenv(config.EnvFunnelDB))
-	if err != nil {
-		slog.Error(err.Error())
-		panic(1)
-	}
-
-	db.BlacklistDAL = blacklistDAL
-
 	muralDAL, err := sql.NewSQLiteDal(os.Getenv(config.EnvMuralDB))
 	if err != nil {
 		slog.Error(err.Error())

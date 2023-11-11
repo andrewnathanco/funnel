@@ -18,6 +18,9 @@ func (mc FunnelController) GetTemplates() []model.TemplateController {
 		"moviesLeft": getMoviesLeft,
 		"getDate": getDate,
 		"getCurrentTheme": getCurrentTheme,
+		"getThemes": getThemes,
+		"newOption": newOption,
+		"getReleaseYear": getReleaseYear,
 	}
 
 	templates := []model.TemplateController{

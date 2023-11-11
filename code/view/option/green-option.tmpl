@@ -1,0 +1,19 @@
+{{ define "green-option" }}
+  <div
+    {{ if not .Selected }}
+      hx-put="/funnel/select-list?list=GREEN_LIST" hx-swap="innerHTML"
+      hx-target="#board"
+    {{ end }}
+    class="
+      text-lg w-full rounded-lg 
+      border-4 py-2 px-4
+    {{ if .Selected }}
+      border-dingley-900 bg-dingley-400 text-dingley-900 grow-xs
+    {{ else }}
+      border-dingley-600 bg-dingley-100 text-dingley-600 hover:cursor-pointer
+    {{ end }}
+  "
+  >
+    Sure yeah I know that one, this is definitely good
+  </div>
+{{ end }}

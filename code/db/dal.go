@@ -2,13 +2,13 @@ package db
 
 import (
 	"fmt"
+	"funnel/model"
 
 	"github.com/ryanbradynd05/go-tmdb"
 )
 
 var (
 	MuralDAL IDAL
-	BlacklistDAL IDAL
 
 	// errors
 	ErrConnectToDatabase   = fmt.Errorf("could not connect to database")
@@ -24,7 +24,13 @@ var (
 type IDAL interface {
 	PingDatabse() error
 
-	// session stuf
+	// game stuff
 	InitDB() (error) 
-	GetRadomMovieByDecade(decade string) (*tmdb.MovieShort, error) 
+	GetRandomMovieByDecade(decade string) (*tmdb.MovieShort, error) 
+	GetNumberPerDecade(decade string) (int)
+	InsertMoveIntoList(list string, movie_key string) (error)
+	
+	// session stuff
+	GetBoardByKey(key string) (*model.FunnelBoard, error) 
+	SetBoardByKey(key string, session model.FunnelBoard) (error) 
 }

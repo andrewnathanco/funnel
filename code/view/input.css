@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer utilities {
+  .grow-xs {
+    transform: scale(1.06);
+  }
   .grow-sm {
     transform: scale(1.1);
   }

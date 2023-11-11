@@ -10,7 +10,3 @@ type IController interface {
 type IRouter interface {
 	ConfigureRouter(IController, *echo.Echo)
 }
-
-type IMovieController interface {
-	GetAnswers(int) ([]Answer, error)
-}

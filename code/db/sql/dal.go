@@ -3,6 +3,7 @@ package sql
 import (
 	"database/sql"
 	"funnel/db"
+	"funnel/model"
 	"log/slog"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -30,11 +31,11 @@ func NewSQLiteDal(file string) (*SQLiteDAL, error) {
 	if err != nil {
 		return nil, db.ErrPingDatabase
 	}
+	db := &SQLiteDAL{ DB: database, }
+	err = db.InitDB()
 
 	// setup schema
-	return &SQLiteDAL{
-		DB: database,
-	}, nil
+	return db, err
 }
 
 func (dal *SQLiteDAL) PingDatabse() (error)  {
@@ -42,9 +43,70 @@ func (dal *SQLiteDAL) PingDatabse() (error)  {
 }
 
 func (dal *SQLiteDAL) InitDB() (error) {
+	_, err := dal.DB.Exec(createBlackList)
+	if err != nil {
+		return err
+	}
+
+	_, err = dal.DB.Exec(createGreenList)
+	if err != nil {
+		return err
+	}
+
+	_, err = dal.DB.Exec(createYellowList)
+	if err != nil {
+		return err
+	}
+
+	_, err = dal.DB.Exec(createFunnelSessions)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func (dal *SQLiteDAL) GetRadomMovieByDecade(decade string) (*tmdb.MovieShort, error)  {
-	return getMovieByDecade(decade)
+func (dal *SQLiteDAL) GetRandomMovieByDecade(decade string) (*tmdb.MovieShort, error)  {
+	return getMovieByDecade(decade, dal)
+}
+
+func (dal *SQLiteDAL) GetBoardByKey(key string) (*model.FunnelBoard, error) {
+	var board *model.FunnelBoard
+	var err error
+
+	board, err = getSessionByKey(key, dal)
+	if err != sql.ErrNoRows {
+		if err != nil  {
+			return nil, err
+		}
+	}
+
+	if err == sql.ErrNoRows {
+		new_board := model.NewFunnelBoard()
+		movie, err := dal.GetRandomMovieByDecade("2020s")
+		if err != nil {
+			return nil, err
+		}
+
+		new_board.Movie = *movie
+		board = &new_board
+		err = insertBoard(key, board, dal)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return board, nil
+}
+
+func (dal *SQLiteDAL) SetBoardByKey(user_key string, board model.FunnelBoard) error {
+	return insertBoard(user_key, &board, dal)
+}
+
+func (dal *SQLiteDAL) GetNumberPerDecade(decade string) (int) {
+	return getNumberPerDecade(decade, dal)
+}
+
+func (dal *SQLiteDAL) InsertMoveIntoList(list string, movie_key string) (error) {
+	return insertIntoList(list,movie_key, dal)
 }
