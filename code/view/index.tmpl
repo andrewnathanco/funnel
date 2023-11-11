@@ -1,0 +1,65 @@
+{{ define "funnel" }}
+  <html lang="en-US">
+    <head>
+      <title></title>
+      <link href="/static/styles.css?{{ getDate }}" rel="stylesheet" />
+      <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico" />
+      <meta name="author" content="Andrew Nathan" />
+      <meta name="title" content="Funnel" />
+      <meta
+        name="description"
+        content="This is a simple web app to funnel for bad and good movies."
+      />
+
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="language" content="English" />
+      <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+      <!-- HTMX -->
+      <script src="/static/js/htmx.min.js"></script>
+    </head>
+
+    <body
+      id="body"
+      class="m-8 bg-desert-sand-200 text-river-bed-600 font-extrabold flex flex-col items-center"
+    >
+      <div class="flex flex-col items-center justify-center">
+        <!-- Content -->
+        <div class="flex flex-col items-center space-y-4">
+          <!-- Header -->
+          <div class="flex flex-col space-y-4 w-full">
+            <div class="text-5xl flex space-x-2 items-center">
+              <div>Funnel</div>
+              <div
+                id="game-version"
+                class="font-semibold w-min h-min text-gray-600 text-xs border-2 px-1 border-river-bed-700 rounded-lg"
+              >
+                {{ getVersion }}
+              </div>
+            </div>
+
+            <div class="flex justify-between">
+              <div class="flex flex-col space-y-1 items-center">
+                <div id="game-theme" class="text-contessa-500 text-4xl">
+                  {{ getCurrentTheme }}
+                </div>
+                <div class="text-md">Theme</div>
+              </div>
+              <div class="flex flex-col space-y-1 items-center">
+                <div id="game-sessions" class="text-contessa-500 text-4xl">
+                  {{ moviesLeft }}
+                </div>
+                <div class="text-md">Movies Left</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="h-1 w-full rounded-full bg-river-bed-600"></div>
+          <!-- Board -->
+          {{ template "board" . }}
+        </div>
+      </div>
+    </body>
+  </html>
+{{ end }}
