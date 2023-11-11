@@ -70,4 +70,5 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           port: 22
           script: |
+            cd /andrewnathan/mural
             docker compose -f funnel.stack.yaml up -d
