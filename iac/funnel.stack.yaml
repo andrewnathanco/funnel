@@ -1,0 +1,22 @@
+version: "3"
+services:
+  funnel_$VERSION:
+    image: andyrewco/funnel:$VERSION
+    container_name: funnel-$VERSION
+    env_file:
+      - ".env"
+    environment:
+      - FUNNEL_DB=/go/src/app/funnel.db
+      - MURAL_DB=/go/src/app/mural.db
+      - VERSION=$VERSION
+    volumes:
+      - ./mural.db:/go/src/app/funnel.db
+      - ./funnel.db:/go/src/app/funnel.db
+    ports:
+      - 1222:1222
+    networks:
+      - funnel_$VERSION
+
+networks:
+  funnel_$VERSION:
+    driver: bridge
