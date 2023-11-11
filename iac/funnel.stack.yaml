@@ -13,7 +13,7 @@ services:
       - ./mural.db:/go/src/app/funnel.db
       - ./funnel.db:/go/src/app/funnel.db
     ports:
-      - 1222:1222
+      - 2222:2222
     networks:
       - funnel_$VERSION
 
