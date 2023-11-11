@@ -30,4 +30,4 @@ COPY --from=builder /go/src/app/tailwind.config.js .
 RUN npx tailwindcss -i ./view/input.css -o ./static/styles.css
 RUN touch .env 
 EXPOSE 1222
-ENTRYPOINT ./runnel
+ENTRYPOINT ./funnel
