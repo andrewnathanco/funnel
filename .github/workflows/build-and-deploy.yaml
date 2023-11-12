@@ -67,4 +67,5 @@ jobs:
           script: |
             cd /andrewnathan/funnel
             touch funnel.db
+            docker compose down
             docker compose -f funnel.stack.yaml up -d
