@@ -99,5 +99,5 @@ func main() {
 
 	// setup routes
 	e.Static("/static", "./static")
-	e.Logger.Fatal(e.Start(":2222"))
+	e.Logger.Fatal(e.Start("10.0.0.42:2222"))
 }

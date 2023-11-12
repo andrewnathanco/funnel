@@ -13,6 +13,7 @@ type Session struct {
 	Movie         MovieShort
 	SessionStatus string `db:"session_status"`
 	Rating        int    `db:"rating"`
+	AllRatings    int
 }
 
 type MovieShort struct {
@@ -50,4 +51,9 @@ func ConvertTMDBToFunnel(tmdbShort tmdb.MovieShort) MovieShort {
 type FunnelMeta struct {
 	ID              int `db:"id"`
 	CurrentTMDBPage int `db:"current_tmdb_page"`
+}
+
+type Rating struct {
+	MovieKey int `db:"movie_key"`
+	Rating   int `db:"rating"`
 }

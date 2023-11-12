@@ -69,6 +69,11 @@ func (dal *SQLiteDAL) InitDB() error {
 		return err
 	}
 
+	_, err = dal.DB.Exec(createRatingTable)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -138,4 +143,15 @@ func (dal *SQLiteDAL) GetMovieFromKey(movie_key int) (*db.MovieShort, error) {
 	movie := db.MovieShort{}
 	err := dal.DB.Get(&movie, "select * from movies where id = ?", movie_key)
 	return &movie, err
+}
+
+func (dal *SQLiteDAL) SaveRating(rating db.Rating) error {
+	_, err := dal.DB.NamedExec(saveRating, rating)
+	return err
+}
+
+func (dal *SQLiteDAL) GetRatings() int {
+	var count int
+	dal.DB.Get(&count, "select count(movie_key) from ratings")
+	return count
 }

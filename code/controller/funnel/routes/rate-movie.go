@@ -34,6 +34,7 @@ func RateMovie(c echo.Context) error {
 	}
 
 	session.Rating = int(rating)
+	session.AllRatings = db.FunnelDAL.GetRatings()
 	db.FunnelDAL.SaveSessionForUser(*session)
 	return c.Render(http.StatusOK, "index.html", session)
 }

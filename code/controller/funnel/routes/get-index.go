@@ -23,6 +23,7 @@ func GetIndex(c echo.Context) error {
 		return c.Render(http.StatusInternalServerError, "error.html", nil)
 	}
 
+	session.AllRatings = db.FunnelDAL.GetRatings()
 	session.Movie = *movie
 	return c.Render(http.StatusOK, "index.html", session)
 }

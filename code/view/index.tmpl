@@ -27,7 +27,7 @@
         <!-- Content -->
         <div class="flex flex-col items-center space-y-4">
           <!-- Header -->
-          <div class="flex flex-col space-y-4 w-full">
+          <div class="flex flex-col items-center space-y-4 w-full">
             <div class="text-5xl flex space-x-2 items-center">
               <div>Funnel</div>
               <div
@@ -37,16 +37,20 @@
                 {{ getVersion }}
               </div>
             </div>
-
             <div class="flex justify-between">
+              <div class="flex flex-col space-y-1 items-center">
+                <div id="game-theme" class="text-contessa-500 text-4xl">
+                  {{ .AllRatings }}
+                </div>
+                <div class="text-md">Movies Rated</div>
+              </div>
+            </div>
           </div>
 
           <!-- Divider -->
           <div class="h-1 w-full rounded-full bg-river-bed-600"></div>
           <!-- Board -->
           {{ template "board" . }}
-
-          <div id="none"></div>
         </div>
       </div>
     </body>

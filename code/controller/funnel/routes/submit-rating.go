@@ -27,10 +27,19 @@ func SubmitRating(c echo.Context) error {
 		return c.Render(http.StatusInternalServerError, "error.html", nil)
 	}
 
+	rating := db.Rating{
+		Rating:   session.Rating,
+		MovieKey: session.MovieKey,
+	}
+
+	db.FunnelDAL.SaveRating(rating)
+
+	// now reset the session
 	session.MovieKey = movie.ID
 	session.Movie = *movie
 	session.Rating = 5
 	session.SessionStatus = db.SESSION_INIT
+	session.AllRatings = db.FunnelDAL.GetRatings()
 	db.FunnelDAL.SaveSessionForUser(*session)
 	return c.Render(http.StatusOK, "index.html", session)
 }

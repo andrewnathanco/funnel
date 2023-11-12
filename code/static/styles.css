@@ -546,6 +546,10 @@ video {
   margin: 2rem;
 }
 
+.m-16 {
+  margin: 4rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -662,6 +666,12 @@ video {
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+
+.space-y-1 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
 }
 
 .overflow-auto {
@@ -915,6 +925,11 @@ video {
 .text-saffron-mango-900 {
   --tw-text-opacity: 1;
   color: rgb(120 58 22 / var(--tw-text-opacity));
+}
+
+.text-contessa-500 {
+  --tw-text-opacity: 1;
+  color: rgb(206 121 107 / var(--tw-text-opacity));
 }
 
 .accent-contessa-500 {

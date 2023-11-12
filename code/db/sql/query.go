@@ -39,8 +39,11 @@ const updateMeta = `
 
 // TODO: revisit this
 const getRandomMovie = `
-    select * from movies 
+    select *
+    from movies
+    where id not in (select movie_key from ratings)
     order by random()
+    limit 1;
 `
 
 const createSessionTable = `
@@ -70,4 +73,9 @@ const createRatingTable = `
         movie_key integer unique,
         rating integer
     );
+`
+
+const saveRating = `
+    insert into ratings (movie_key, rating)
+    values (:movie_key, :rating);
 `

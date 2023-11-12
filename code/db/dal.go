@@ -30,4 +30,6 @@ type IDAL interface {
 	GetSessionForUser(user_key string) (*Session, error)
 	GetMovieFromKey(movie_key int) (*MovieShort, error)
 	SaveSessionForUser(session Session) error
+	SaveRating(Rating) error
+	GetRatings() int
 }
