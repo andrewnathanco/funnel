@@ -27,8 +27,9 @@ const createMetaTable = `
     on conflict(id) do nothing;
 `
 const insertMovies = `
-    insert into movies (title, original_title, release_date, overview, vote_average, vote_count, popularity, adult, video, backdrop_path, poster_path)
-    values (:title, :original_title, :release_date, :overview, :vote_average, :vote_count, :popularity, :adult, :video, :backdrop_path, :poster_path);
+    insert into movies (id, title, original_title, release_date, overview, vote_average, vote_count, popularity, adult, video, backdrop_path, poster_path)
+    values (:id, :title, :original_title, :release_date, :overview, :vote_average, :vote_count, :popularity, :adult, :video, :backdrop_path, :poster_path)
+    on conflict(id) do nothing;
 `
 
 const updateMeta = `

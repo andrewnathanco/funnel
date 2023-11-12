@@ -17,6 +17,7 @@ type Session struct {
 }
 
 type MovieShort struct {
+	MovieKey      int     `db:"movie_key" json:"movie_key"`
 	ID            int     `db:"id" json:"id"`
 	Title         string  `db:"title" json:"title"`
 	OriginalTitle string  `db:"original_title" json:"original_title"`
