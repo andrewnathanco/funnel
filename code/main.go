@@ -8,6 +8,7 @@ import (
 	"funnel/db"
 	"funnel/db/sql"
 	mural_middleware "funnel/middleware"
+	"funnel/worker"
 	"html/template"
 	"io"
 	"log/slog"
@@ -37,28 +38,23 @@ func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c 
 	return tmpl.ExecuteTemplate(w, name, data)
 }
 
+func Must(err error) {
+	if err != nil {
+		slog.Error(err.Error())
+		panic(1)
+	}
+}
+
 func main() {
 	// load env
-	err := godotenv.Load()
-	if err != nil {
-		slog.Error(err.Error())
-		panic(1)
-	}
+	Must(godotenv.Load())
 
 	// validate env
-	err = config.ValidateENV()
-	if err != nil {
-		slog.Error(err.Error())
-		panic(1)
-	}
+	Must(config.ValidateENV())
+	funnelDAL, err := sql.NewSQLiteDal(os.Getenv(config.EnvFunnelDB))
+	Must(err)
 
-	muralDAL, err := sql.NewSQLiteDal(os.Getenv(config.EnvMuralDB))
-	if err != nil {
-		slog.Error(err.Error())
-		panic(1)
-	}
-
-	db.MuralDAL = muralDAL
+	db.FunnelDAL = funnelDAL
 
 	// start setting up
 	e := echo.New()
@@ -73,6 +69,16 @@ func main() {
 	mural_middleware.InitSession()
 	e.Use(mural_middleware.GetUserKey)
 
+	// setup schedular
+	scheduler := worker.NewFunnelSchedular()
+
+	// setup the project
+	scheduler.InitProgram()
+	Must(scheduler.RegisterWorkers())
+
+	// start scheduler
+	scheduler.StartScheduler()
+
 	// Define your routes and handlers here
 	// setup routes and controllers
 	route_conrollers := controller.GetRouteControllers()
@@ -86,7 +92,7 @@ func main() {
 		// add routes
 		route_controller.Router.ConfigureRouter(route_controller.Controller, e)
 	}
-	
+
 	e.Renderer = &TemplateRenderer{
 		templates: templates,
 	}

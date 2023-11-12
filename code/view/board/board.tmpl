@@ -3,11 +3,11 @@
     id="board"
     class="flex flex-col justify-between items-center space-y-4 w-full h-full"
   >
-    <div class="flex flex-col space-y-4 w-full">
+    <div class="flex flex-col items-center space-y-4 w-full">
       <div class="text-4xl">
         <div
           class="
-          flex flex-col border-2 border-river-bed-800 bg-cover w-full h-96 rounded-lg
+          flex flex-col border-2 border-river-bed-800 bg-cover w-96 h-96 rounded-lg
         "
           style="background-image: url('https://image.tmdb.org/t/p/w1280{{ .Movie.PosterPath }}');"
         ></div>
@@ -20,25 +20,20 @@
       <div class="text-md">{{ .Movie.Overview }}</div>
     </div>
     <div class="p-8 flex flex-col space-y-12 w-full">
+      {{ template "mural-rating" . }}
       <div
-        class="flex flex-col 
-          space-y-2
-      "
-      >
-        {{ template "green-option" newOption (eq .SelectedList "GREEN_LIST") }}
-        {{ template "yellow-option" newOption (eq .SelectedList "YELLOW_LIST") }}
-        {{ template "red-option" newOption (eq .SelectedList "BLACK_LIST") }}
-      </div>
-
-      <div
-        hx-put="/funnel/submit"
-        hx-swap="innerHTML"
-        hx-target="#body"
+        {{ if eq .SessionStatus "SESSION_RATED" }}
+          hx-put="/funnel/submit" hx-swap="innerHTML" hx-target="#body"
+        {{ end }}
         class="
             w-full p-2 text-base text-river-bed-100 rounded-md 
             flex justify-center items-center
-            hover:cursor-pointer bg-river-bed-600
             shadow-lg
+        {{ if eq .SessionStatus "SESSION_RATED" }}
+          bg-river-bed-600 hover:cursor-pointer
+        {{ else }}
+          bg-river-bed-400
+        {{ end }}
         "
       >
         Submit

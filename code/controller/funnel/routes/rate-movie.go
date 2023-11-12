@@ -5,11 +5,14 @@ import (
 	"funnel/middleware"
 	"log/slog"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
-func GetIndex(c echo.Context) error {
+func RateMovie(c echo.Context) error {
+	rating_str := c.FormValue("rate-slider")
+
 	user_key := middleware.GetUserKeyFromContext(c)
 	session, err := db.FunnelDAL.GetSessionForUser(user_key)
 	if err != nil {
@@ -24,5 +27,13 @@ func GetIndex(c echo.Context) error {
 	}
 
 	session.Movie = *movie
+	session.SessionStatus = db.SESSION_RATED
+	rating, err := strconv.ParseInt(rating_str, 10, 64)
+	if err != nil {
+		return c.Render(http.StatusBadRequest, "index.html", session)
+	}
+
+	session.Rating = int(rating)
+	db.FunnelDAL.SaveSessionForUser(*session)
 	return c.Render(http.StatusOK, "index.html", session)
 }

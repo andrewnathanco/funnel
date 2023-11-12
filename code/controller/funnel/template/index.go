@@ -9,10 +9,7 @@ var (
 	IndexTemplate = []string{
 		"view/index.html",
 		"view/index.tmpl",
-		"view/decade-selector.tmpl",
-		"view/option/red-option.tmpl",
-		"view/option/yellow-option.tmpl",
-		"view/option/green-option.tmpl",
+		"view/rating/mural-rating.tmpl",
 	}
 )
 

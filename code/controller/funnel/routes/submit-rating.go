@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetIndex(c echo.Context) error {
+func SubmitRating(c echo.Context) error {
 	user_key := middleware.GetUserKeyFromContext(c)
 	session, err := db.FunnelDAL.GetSessionForUser(user_key)
 	if err != nil {
@@ -17,12 +17,20 @@ func GetIndex(c echo.Context) error {
 		return c.Render(http.StatusInternalServerError, "error.html", nil)
 	}
 
-	movie, err := db.FunnelDAL.GetMovieFromKey(session.MovieKey)
+	if err != nil {
+		return c.Render(http.StatusBadRequest, "index.html", session)
+	}
+
+	movie, err := db.FunnelDAL.GetRandomMovie()
 	if err != nil {
 		slog.Error(err.Error())
 		return c.Render(http.StatusInternalServerError, "error.html", nil)
 	}
 
+	session.MovieKey = movie.ID
 	session.Movie = *movie
+	session.Rating = 5
+	session.SessionStatus = db.SESSION_INIT
+	db.FunnelDAL.SaveSessionForUser(*session)
 	return c.Render(http.StatusOK, "index.html", session)
 }

@@ -5,5 +5,10 @@
   },
   "files.associations": {
     "*.tmpl": "html"
+  },
+  "[go]": {
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "golang.go"
   }
 }

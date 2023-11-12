@@ -1,0 +1,19 @@
+{{ define "mural-rating" }}
+  <div class="">
+    <input
+      hx-post="/funnel/rate"
+      hx-swap="innerHTML"
+      hx-target="#body"
+      id="rate-slider"
+      name="rate-slider"
+      type="range"
+      min="1"
+      max="10"
+      value="{{ .Rating }}"
+      step="1"
+      class="w-full h-2 bg-river-bed-700 
+      accent-contessa-500
+      rounded-lg appearance-none cursor-pointer"
+    />
+  </div>
+{{ end }}

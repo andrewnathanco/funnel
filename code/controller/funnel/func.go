@@ -1,12 +1,10 @@
 package funnel
 
 import (
-	"fmt"
 	"funnel/config"
+	"funnel/db"
 	"os"
 	"time"
-
-	"github.com/ryanbradynd05/go-tmdb"
 )
 
 func getVersion() string {
@@ -52,13 +50,12 @@ func newOption(selected bool) option {
 	return option{Selected: selected}
 }
 
-func getReleaseYear(movie tmdb.MovieShort) string {
+func getReleaseYear(movie db.MovieShort) string {
 	// we should be able to trust this, not just put an empty string
-	layout := "2006-01-02"
-	release_date, err := time.Parse(layout, movie.ReleaseDate)
-	if err != nil {
-		return ""
+	var year string
+	if len(movie.ReleaseDate) >= 4 {
+		year = movie.ReleaseDate[:4]
 	}
+	return year
 
-	return fmt.Sprintf("%d", release_date.Year())
 }

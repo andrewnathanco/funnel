@@ -1,91 +1,73 @@
 package sql
 
-const createBlackList string = `
-create table if not exists black_list (
-	answer_key string not null primary key
-);`
-
-const createGreenList string = `
-create table if not exists green_list (
-	answer_key string not null primary key
-);`
-
-const createYellowList string = `
-create table if not exists yellow_list (
-	answer_key string not null primary key
-);`
-
-const createFunnelSessions string = `
-	create table if not exists funnel_sessions (
-	user_key string not null primary key,
-	session string not null
-);`
-
-const getMovieByDecadeQuery string = `
-select answer_data,
-(
-	CAST(JSON_EXTRACT(answer_data, '$.vote_average') AS DECIMAL(10,2)) + 
-	CAST(JSON_EXTRACT(answer_data, '$.vote_count') AS DECIMAL(10,2)) + 
-	CAST(JSON_EXTRACT(answer_data, '$.popularity') AS DECIMAL(10,2)) 
-) / 3 AS answer_average
-from answers
-where (cast(substr(json_extract(answer_data, '$.release_date'), 1, 4) as int) / 10) * 10 like ?
-and answer_average > 500 and answer_average < 2000
-order by random()
-`
-const getSessionByKeyQuery string = `
-select session
-from funnel_sessions 
-where user_key = ?
+const createMoviesTable = `
+    create table if not exists movies (
+        id integer primary key,
+        title text,
+        original_title text,
+        release_date date,
+        overview text,
+        vote_average real,
+        vote_count integer,
+        popularity real,
+        adult boolean,
+        video boolean,
+        backdrop_path text,
+        poster_path text
+);
 `
 
-const upsertBoardQuery string = `
-    insert or replace into funnel_sessions (user_key, session)
-    values (?, ?)
+const createMetaTable = `
+    create table if not exists funnel_meta (
+        id int primary key,
+        current_tmdb_page real
+    );
+
+    insert into funnel_meta(id, current_tmdb_page) values(1, 1)
+    on conflict(id) do nothing;
 `
-const getNumberPerDecadeQuery string = `
-select count(answer_key),
-(
-	CAST(JSON_EXTRACT(answer_data, '$.vote_average') AS DECIMAL(10,2)) + 
-	CAST(JSON_EXTRACT(answer_data, '$.vote_count') AS DECIMAL(10,2)) + 
-	CAST(JSON_EXTRACT(answer_data, '$.popularity') AS DECIMAL(10,2)) 
-) / 3 AS answer_average
-from answers
-where 
-answer_key not in (
-    select answer_key
-    from red_list
-) 
-and 
-answer_key not in (
-    select answer_key
-    from green_list
-)
-and
-answer_key not in (
-    select answer_key
-    from yellow_list
-)
-and 
-answer_key not in (
-    select answer_key
-    from yellow_list
-)
-and (cast(substr(json_extract(answer_data, '$.release_date'), 1, 4) as int) / 10) * 10 like ?
-and answer_average > 500 and answer_average < 2000
+const insertMovies = `
+    insert into movies (title, original_title, release_date, overview, vote_average, vote_count, popularity, adult, video, backdrop_path, poster_path)
+    values (:title, :original_title, :release_date, :overview, :vote_average, :vote_count, :popularity, :adult, :video, :backdrop_path, :poster_path);
 `
 
-const greenListMovie string = `
-    insert or ignore into green_list (answer_key)
-    values (?)
+const updateMeta = `
+    update funnel_meta
+    set current_tmdb_page = :current_tmdb_page
+    where id = :id;
 `
 
-const yellowListMovie string = `
-    insert or ignore into yellow_list (answer_key)
-    values (?)
+// TODO: revisit this
+const getRandomMovie = `
+    select * from movies 
+    order by random()
 `
 
-const blackListMovie string = `
-    insert or ignore into black_list (answer_key)
-    values (?)
+const createSessionTable = `
+    create table if not exists sessions (
+        user_key text primary key,
+        current_movie integer,
+        session_status text,
+        rating integer
+    );
+`
+
+const getSessionForUser = `
+    select * from sessions
+    where user_key = ?
+`
+const saveSessionForUser = `
+    insert into sessions (user_key, current_movie, session_status, rating)
+    values (:user_key, :current_movie, :session_status, :rating)
+    on conflict(user_key) do update set
+        current_movie = excluded.current_movie,
+        session_status = excluded.session_status,
+        rating = excluded.rating;
+`
+
+const createRatingTable = `
+    create table if not exists ratings (
+        movie_key integer unique,
+        rating integer
+    );
 `

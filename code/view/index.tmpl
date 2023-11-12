@@ -39,28 +39,14 @@
             </div>
 
             <div class="flex justify-between">
-              <div class="flex flex-col space-y-1 items-center">
-                <div id="game-theme" class="text-contessa-500 text-4xl">
-                  {{ .Theme }}
-                </div>
-                <div class="text-md">Theme</div>
-              </div>
-              <div class="flex flex-col space-y-1 items-center">
-                <div id="game-sessions" class="text-contessa-500 text-4xl">
-                  {{ .MoviesLeft }}
-                </div>
-                <div class="text-md">Movies Left</div>
-              </div>
-            </div>
           </div>
-
-          {{ template "decade-selector" . }}
-
 
           <!-- Divider -->
           <div class="h-1 w-full rounded-full bg-river-bed-600"></div>
           <!-- Board -->
           {{ template "board" . }}
+
+          <div id="none"></div>
         </div>
       </div>
     </body>
